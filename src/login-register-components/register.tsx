@@ -1,12 +1,16 @@
 //import React, { useState } from "react";
 import { set, useForm, type SubmitHandler } from "react-hook-form";
+import React, { useRef } from "react";
 
 import "./register-style.css";
 
 /**
- * Login component
- * This component is used to render the login form.
- *
+ * register component
+ * This component is used to render the register form.
+ * @param {string} name 
+ * @param {string} email 
+ * @param {string} password
+ * @returns {JSX.Element} Login component
  */
 
 type FromFields = {
@@ -16,20 +20,42 @@ type FromFields = {
 };
 
 function Login() {
+  // form title referece
+  const formTitle = useRef<HTMLHeadingElement>(null);
+
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<FromFields>();
+  } = useForm<FromFields>({
+    defaultValues: {
+      name: "John",
+      email: "JohnDoe@domain.xx",
+      password: "123456",
+    }
+  });
 
+  /*** 
+   * onSubmit function
+   * Function  used to handle form submission.
+   * Debugging purpose: Data available in console log 
+   * @param {FromFields} data - form data
+   * 
+   */
   const onSubmit: SubmitHandler<FromFields> = async (data) => {
+    // Simulate a server request, handling errors
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      throw new Error();
       console.log(data);
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // wait for server response
+      if (formTitle.current) { // update current form status
+        formTitle.current.innerHTML = 
+        "Sign in <br/> Registration successful";
+      }
+      throw new Error();
     } catch (error) {
-      setError("root", {
+      // example error handling
+      setError("email", {
         message: "Email already exists"
       });
     }
@@ -37,7 +63,7 @@ function Login() {
 
   return (
     <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-      <h2>Sign in</h2>
+      <h2 id="formTitle" ref={formTitle}>Sign in</h2>
       {errors.name && (
         <div className="incorrect-message">{errors.name.message}</div>
       )}
