@@ -7,13 +7,13 @@ import "./register-style.css";
 /**
  * register component
  * This component is used to render the register form.
- * @param {string} name 
- * @param {string} email 
+ * @param {string} name
+ * @param {string} email
  * @param {string} password
  * @returns {JSX.Element} Login component
  */
 
-type FromFields = {
+type FormFields = {
   name: string;
   email: string;
   password: string;
@@ -28,49 +28,62 @@ function Login() {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<FromFields>({
+  } = useForm<FormFields>({
     defaultValues: {
       name: "John",
       email: "JohnDoe@domain.xx",
       password: "123456",
-    }
+    },
   });
 
-  /*** 
+  /***
    * onSubmit function
    * Function  used to handle form submission.
-   * Debugging purpose: Data available in console log 
-   * @param {FromFields} data - form data
-   * 
+   * Debugging purpose: Data available in console log
+   * @param {FormFields} data - form data
+   *
    */
-  const onSubmit: SubmitHandler<FromFields> = async (data) => {
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
     // Simulate a server request, handling errors
     try {
       console.log(data);
       await new Promise((resolve) => setTimeout(resolve, 1000)); // wait for server response
-      if (formTitle.current) { // update current form status
-        formTitle.current.innerHTML = 
-        "Sign in <br/> Registration successful";
+      if (formTitle.current) {
+        // update current form status
+        formTitle.current.innerHTML = "Sign in <br/> Registration successful";
       }
       throw new Error();
     } catch (error) {
       // example error handling
       setError("email", {
-        message: "Email already exists"
+        message: "Email already exists",
       });
     }
   };
 
   return (
     <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-      <h2 id="formTitle" ref={formTitle}>Sign in</h2>
-      {errors.name && (
+      <h2 id="formTitle" ref={formTitle}>
+        Sign in <br />
+        <span style={{ visibility: "hidden" }}>Registration successful</span>
+      </h2>
+      {errors.name ? (
         <div className="incorrect-message">{errors.name.message}</div>
+      ) : (
+        <div
+          className="incorrect-message invisible"
+          style={{ visibility: "hidden" }}
+        >
+          ABC
+        </div>
       )}
       <input
         {...register("name", {
           required: "Name is required",
-          minLength: 3,
+          minLength: {
+            value: 3,
+            message: "Name must be at least 3 characters",
+          },
           maxLength: 20,
           pattern: /^[A-Za-z]+$/i,
         })}
@@ -85,7 +98,7 @@ function Login() {
           required: "email is required",
           //   pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
           validate: (value) => {
-            if (!value.includes('@')) {
+            if (!value.includes("@")) {
               return "Email must contain @";
             }
             return true;
