@@ -1,23 +1,25 @@
 //import React, { useState } from "react";
-import { set, useForm, type SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import React, { useRef } from "react";
 
 import "./login-register-style.css";
 
 /**
- * login component
- * This component is used to render the login form.
+ * register component
+ * This component is used to render the register form.
  * @param {string} name
+ * @param {string} email
  * @param {string} password
- * @returns {JSX.Element} Login component
+ * @returns {JSX.Element} register component
  */
 
 type FormFields = {
   name: string;
+  email: string;
   password: string;
 };
 
-function Login() {
+function Register() {
   // form title referece
   const formTitle = useRef<HTMLHeadingElement>(null);
 
@@ -29,6 +31,7 @@ function Login() {
   } = useForm<FormFields>({
     defaultValues: {
       name: "John",
+      email: "JohnDoe@domain.xx",
       password: "123456",
     },
   });
@@ -47,27 +50,31 @@ function Login() {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // wait for server response
       if (formTitle.current) {
         // update current form status
-        formTitle.current.innerHTML = "Log in <br/> login successful";
+        formTitle.current.innerHTML = "Sign in <br/> Registration successful";
       }
       throw new Error();
     } catch (error) {
       // example error handling
+      setError("email", {
+        message: "Email already exists",
+      });
     }
   };
 
   return (
     <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
       <h2 id="formTitle" ref={formTitle}>
-        Log in <br />
-        {/* <span style={{ visibility: "hidden" }}>Log in successful</span> */}
+        Sign in <br />
+        <span style={{ visibility: "hidden" }}>Registration successful</span>
       </h2>
       {errors.name ? (
         <div className="incorrect-message">{errors.name.message}</div>
       ) : (
-        <div // incorrect-message placholder
+        <div
           className="incorrect-message invisible"
-          style={{ visibility: "hidden" }}>
-          
+          style={{ visibility: "hidden" }}
+        >
+          ABC
         </div>
       )}
       <input
@@ -109,4 +116,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
