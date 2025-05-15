@@ -5,21 +5,19 @@ import React, { useRef } from "react";
 import "./login-register-style.css";
 
 /**
- * register component
- * This component is used to render the register form.
+ * login component
+ * This component is used to render the login form.
  * @param {string} name
- * @param {string} email
  * @param {string} password
- * @returns {JSX.Element} register component
+ * @returns {JSX.Element} Login component
  */
 
 type FormFields = {
   name: string;
-  email: string;
   password: string;
 };
 
-function Register() {
+function Login() {
   // form title referece
   const formTitle = useRef<HTMLHeadingElement>(null);
 
@@ -31,7 +29,6 @@ function Register() {
   } = useForm<FormFields>({
     defaultValues: {
       name: "John",
-      email: "JohnDoe@domain.xx",
       password: "123456",
     },
   });
@@ -50,31 +47,27 @@ function Register() {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // wait for server response
       if (formTitle.current) {
         // update current form status
-        formTitle.current.innerHTML = "Sign in <br/> Registration successful";
+        formTitle.current.innerHTML = "Log in <br/> login successful";
       }
       throw new Error();
     } catch (error) {
       // example error handling
-      setError("email", {
-        message: "Email already exists",
-      });
     }
   };
 
   return (
     <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
       <h2 id="formTitle" ref={formTitle}>
-        Sign in <br />
-        <span style={{ visibility: "hidden" }}>Registration successful</span>
+        Log in <br />
+        {/* <span style={{ visibility: "hidden" }}>Log in successful</span> */}
       </h2>
       {errors.name ? (
         <div className="incorrect-message">{errors.name.message}</div>
       ) : (
-        <div
+        <div // incorrect-message placholder
           className="incorrect-message invisible"
-          style={{ visibility: "hidden" }}
-        >
-          ABC
+          style={{ visibility: "hidden" }}>
+          
         </div>
       )}
       <input
@@ -89,23 +82,6 @@ function Register() {
         })}
         type="text"
         placeholder="Enter name..."
-      />
-      {errors.email && (
-        <div className="incorrect-message">{errors.email.message}</div>
-      )}
-      <input
-        {...register("email", {
-          required: "email is required",
-          //   pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-          validate: (value) => {
-            if (!value.includes("@")) {
-              return "Email must contain @";
-            }
-            return true;
-          },
-        })}
-        type="text"
-        placeholder="Enter e-mail..."
       />
       {errors.password && (
         <div className="incorrect-message">{errors.password.message}</div>
@@ -133,4 +109,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;
