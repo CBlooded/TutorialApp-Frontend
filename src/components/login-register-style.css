@@ -1,0 +1,22 @@
+.login-form {
+  background-color: #1D417C;
+  display: flex;
+  flex-direction: column;
+  padding: 20px; 
+  border-radius: 8px;
+  min-width: 300px;
+}
+
+.login-form input, button {
+  margin: 14px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #97b7f8;
+  
+  box-shadow:  0px 4px 6px #00000073;
+}
+
+.incorrect-message{
+  color: #FFFFFF;
+  font-style: bold;
+}
