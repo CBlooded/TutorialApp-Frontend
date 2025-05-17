@@ -1,37 +1,34 @@
 //import React, { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import React, { useRef } from "react";
+import { useRef } from "react";
 
 import "./login-register-style.css";
+import { useNavigate } from "react-router";
+import axiosConfig from "../api/axiosConfig";
 
 /**
  * login component
  * This component is used to render the login form.
- * @param {string} name
+ * @param {string} username
  * @param {string} password
  * @returns {JSX.Element} Login component
  */
 
 type FormFields = {
-  name: string;
+  username: string;
   password: string;
 };
 
 function Login() {
   // form title referece
   const formTitle = useRef<HTMLHeadingElement>(null);
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitting },
-  } = useForm<FormFields>({
-    defaultValues: {
-      name: "John",
-      password: "123456",
-    },
-  });
+  } = useForm<FormFields>();
 
   /***
    * onSubmit function
@@ -41,17 +38,20 @@ function Login() {
    *
    */
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    // Simulate a server request, handling errors
     try {
-      console.log(data);
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // wait for server response
-      if (formTitle.current) {
-        // update current form status
-        formTitle.current.innerHTML = "Log in <br/> login successful";
-      }
-      throw new Error();
+      const response = await axiosConfig.post(
+        "/api/v1/auth/authenticate",
+        data
+      );
+      const { token } = response.data;
+      const { errorMessage } = response.data;
+      console.log(
+        `State of response:\nErrMsg:${errorMessage}\nStatus:${response.status}`
+      );
+      if (token) localStorage.setItem("token", token);
+      if (response.status === 200 && errorMessage === null) navigate("/app");
     } catch (error) {
-      // example error handling
+      console.log(`error:${error}`);
     }
   };
 
@@ -61,27 +61,26 @@ function Login() {
         Log in <br />
         {/* <span style={{ visibility: "hidden" }}>Log in successful</span> */}
       </h2>
-      {errors.name ? (
-        <div className="incorrect-message">{errors.name.message}</div>
+      {errors.username ? (
+        <div className="incorrect-message">{errors.username.message}</div>
       ) : (
         <div // incorrect-message placholder
           className="incorrect-message invisible"
-          style={{ visibility: "hidden" }}>
-          
-        </div>
+          style={{ visibility: "hidden" }}
+        ></div>
       )}
       <input
-        {...register("name", {
-          required: "Name is required",
+        {...register("username", {
+          required: "username is required",
           minLength: {
             value: 3,
-            message: "Name must be at least 3 characters",
+            message: "username must be at least 3 characters",
           },
           maxLength: 20,
           pattern: /^[A-Za-z]+$/i,
         })}
         type="text"
-        placeholder="Enter name..."
+        placeholder="Enter username..."
       />
       {errors.password && (
         <div className="incorrect-message">{errors.password.message}</div>
@@ -102,6 +101,9 @@ function Login() {
       {errors.root && (
         <div className="incorrect-message">{errors.root.message}</div>
       )}
+      <button type="button" onClick={() => navigate("/register")}>
+        Register?
+      </button>
       <button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Loading..." : "Submit"}
       </button>
