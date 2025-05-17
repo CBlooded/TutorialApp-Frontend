@@ -1,8 +1,9 @@
 //import React, { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import React, { useRef } from "react";
+import { useRef } from "react";
 
 import "./login-register-style.css";
+import { useNavigate } from "react-router";
 
 /**
  * login component
@@ -20,11 +21,11 @@ type FormFields = {
 function Login() {
   // form title referece
   const formTitle = useRef<HTMLHeadingElement>(null);
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     defaultValues: {
@@ -49,9 +50,9 @@ function Login() {
         // update current form status
         formTitle.current.innerHTML = "Log in <br/> login successful";
       }
-      throw new Error();
+      navigate("/app");
     } catch (error) {
-      // example error handling
+      console.log(error);
     }
   };
 
@@ -66,9 +67,8 @@ function Login() {
       ) : (
         <div // incorrect-message placholder
           className="incorrect-message invisible"
-          style={{ visibility: "hidden" }}>
-          
-        </div>
+          style={{ visibility: "hidden" }}
+        ></div>
       )}
       <input
         {...register("name", {
@@ -102,6 +102,7 @@ function Login() {
       {errors.root && (
         <div className="incorrect-message">{errors.root.message}</div>
       )}
+      <button onClick={() => navigate("/register")}>Register?</button>
       <button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Loading..." : "Submit"}
       </button>

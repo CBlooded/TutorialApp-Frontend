@@ -1,18 +1,24 @@
+import "./App.css";
 
-import './App.css'
-
-import Register from './components/register'
-import Login from './components/login'
-
+import Login from "./components/login";
+import Layout from "./components/Layout";
+import Register from "./components/register";
+import { BrowserRouter, Routes, Route } from "react-router";
 
 function App() {
-
   return (
     <>
-      {/* <Register/> */}
-      <Login/>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/">
+            <Route index element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="app" element={<Layout />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

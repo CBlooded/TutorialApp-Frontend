@@ -1,6 +1,7 @@
 //import React, { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import React, { useRef } from "react";
+import { useRef } from "react";
+import { useNavigate } from "react-router";
 
 import "./login-register-style.css";
 
@@ -22,11 +23,10 @@ type FormFields = {
 function Register() {
   // form title referece
   const formTitle = useRef<HTMLHeadingElement>(null);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     defaultValues: {
@@ -52,12 +52,10 @@ function Register() {
         // update current form status
         formTitle.current.innerHTML = "Sign in <br/> Registration successful";
       }
-      throw new Error();
+      navigate("/");
     } catch (error) {
       // example error handling
-      setError("email", {
-        message: "Email already exists",
-      });
+      console.log(error);
     }
   };
 
