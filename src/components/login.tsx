@@ -45,11 +45,13 @@ function Login() {
       );
       const { token } = response.data;
       const { errorMessage } = response.data;
-      console.log(`${errorMessage},${response.status}`);
+      console.log(
+        `State of response:\nErrMsg:${errorMessage}\nStatus:${response.status}`
+      );
       if (token) localStorage.setItem("token", token);
       if (response.status === 200 && errorMessage === null) navigate("/app");
     } catch (error) {
-      console.log(error);
+      console.log(`error:${error}`);
     }
   };
 
@@ -99,7 +101,9 @@ function Login() {
       {errors.root && (
         <div className="incorrect-message">{errors.root.message}</div>
       )}
-      <button onClick={() => navigate("/register")}>Register?</button>
+      <button type="button" onClick={() => navigate("/register")}>
+        Register?
+      </button>
       <button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Loading..." : "Submit"}
       </button>

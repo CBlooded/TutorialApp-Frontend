@@ -41,11 +41,13 @@ function Register() {
       const response = await axiosConfig.post("/api/v1/auth/register", data);
       const { token } = response.data;
       const { errorMessage } = response.data;
-      console.log(`${errorMessage},${response.status}`);
+      console.log(
+        `State of response:\n ErrMsg ${errorMessage}\nStatus:${response.status}`
+      );
       if (token) localStorage.setItem("token", token);
       if (response.status === 200 && errorMessage === null) navigate("/login");
     } catch (error) {
-      console.log(error);
+      console.log(`error:${error}`);
     }
   };
 
@@ -97,6 +99,9 @@ function Register() {
       {errors.root && (
         <div className="incorrect-message">{errors.root.message}</div>
       )}
+      <button type="button" onClick={() => navigate("/login")}>
+        Return?
+      </button>
       <button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Loading..." : "Submit"}
       </button>
