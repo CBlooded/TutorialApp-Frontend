@@ -2,11 +2,11 @@ import "./NavBar.css";
 import logo from "../assets/logo.png";
 
 import React from "react";
-import type { ReactNode } from "react"; // REACT NODE - 'type' for READONLY 
+// import type { ReactNode } from "react";
 
-interface NavBarProps {
-  children?: ReactNode;
-}
+type NavBarProps = {
+  children?: React.ReactNode;
+};
 
 function NavBar({ children }: NavBarProps) {
   /***
