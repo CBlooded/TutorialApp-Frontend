@@ -3,6 +3,7 @@ import "./App.css";
 import Login from "./components/login";
 import Register from "./components/register";
 import Dashboard from "./pages/dashboard";
+import Chat from "./pages/chat";
 // import Layout from "./components/Layout";
 // import NavBar from "./components/NavBar"; --> imported in dashboard
 
@@ -19,6 +20,7 @@ function App() {
         <Route index element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="dashboard" element={<Dashboard />} />
+        <Route path="chat" element={<Chat />} />
         </Route>
       </Routes>
     </BrowserRouter>

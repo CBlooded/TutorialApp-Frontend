@@ -24,6 +24,7 @@ function NavBar({ children }: NavBarProps) {
           <a href="/">Login</a>
           <a href="/register">Register</a>
           <a href="/dashboard">Dashboard</a>
+          <a href="/chat">Chat Room</a>
         </div>
       </header>
       {children}
