@@ -1,11 +1,8 @@
 .dashboard_container {
-margin-top: 920px; /* Increased margin to push content lower below navbar */
-overflow-y: auto;
-display: flex;
-flex-direction: column;
-align-items: center;
-height: calc(100vh - 80px); /* Adjust 80px to your navbar height */
-margin-top: 80px; /* Match your navbar height */
-overflow-y: auto;
-justify-content: flex-start;
+  margin-top: 5vh; /* Increased margin to push content lower below navbar */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(100vh - 80px); /* Adjust 80px to your navbar height */
+  justify-content: flex-start;
 }
