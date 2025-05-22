@@ -103,7 +103,7 @@ function Register() {
       {errors.root && (
         <div className="incorrect-message">{errors.root.message}</div>
       )}
-      <button type="button" onClick={() => navigate("/login")}>
+      <button type="button" onClick={() => navigate("/")}>
         Return?
       </button>
       <button type="submit" disabled={isSubmitting}>

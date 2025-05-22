@@ -1,4 +1,4 @@
-
+  import './dashboard.css'
  import NavBar from "../components/NavBar";
 
 function dashboard() {
@@ -6,7 +6,6 @@ function dashboard() {
 
     <NavBar />
     <div className="dashboard_container">
-      <span style={{ visibility: "hidden", fontSize: "20px" }}>placeholder - starging point</span>
       <h1>Welcome to the Home Page</h1>
       <p>This is the home page of our application.</p>
       <p>
