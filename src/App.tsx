@@ -4,8 +4,6 @@ import Login from "./components/login";
 import Register from "./components/register";
 import Dashboard from "./pages/dashboard";
 import Chat from "./pages/chat";
-// import Layout from "./components/Layout";
-// import NavBar from "./components/NavBar"; --> imported in dashboard
 
 import { BrowserRouter, Routes, Route } from "react-router";
 // import { Children } from "react";

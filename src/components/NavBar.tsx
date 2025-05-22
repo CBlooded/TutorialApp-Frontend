@@ -1,14 +1,8 @@
 import "./NavBar.css";
 import logo from "../assets/logo.png";
 
-import React from "react";
-// import type { ReactNode } from "react";
 
-type NavBarProps = {
-  children?: React.ReactNode;
-};
-
-function NavBar({ children }: NavBarProps) {
+function NavBar() {
   /***
    * Main Navigation Bar
    * Always visible on the top of the page.
@@ -27,11 +21,6 @@ function NavBar({ children }: NavBarProps) {
           <a href="/chat">Chat Room</a>
         </div>
       </header>
-      {children}
-      {/* TO DO - current page location - breadcrumbs */}
-      {/* <div className="breadCrumbs">
-        <p>Home / Dashboard</p>
-    </div> */}
     </>
   );
 }
