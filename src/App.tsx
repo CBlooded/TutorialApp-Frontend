@@ -6,13 +6,17 @@ import Dashboard from "./pages/dashboard";
 import Chat from "./pages/chat";
 
 import { BrowserRouter, Routes, Route } from "react-router";
-// import { Children } from "react";
+import { useEffect } from "react";
+import setupInterceptors from "./api/SetupInterceptor";
+
 
 function App() {
+  useEffect(() => {
+    setupInterceptors();
+  }, []);
+
   return (
     <BrowserRouter>
-    {/* <NavBar /> */}
-
       <Routes>
         <Route path="/">
         <Route index element={<Login />} />

@@ -2,6 +2,7 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRef } from "react";
 import { useNavigate } from "react-router";
+import axiosConfig from "../api/axiosConfig";
 
 import "./login-register-style.css";
 
@@ -9,14 +10,12 @@ import "./login-register-style.css";
  * register component
  * This component is used to render the register form.
  * @param {string} name
- * @param {string} email
  * @param {string} password
  * @returns {JSX.Element} register component
  */
 
 type FormFields = {
-  name: string;
-  email: string;
+  username: string;
   password: string;
 };
 
@@ -28,13 +27,7 @@ function Register() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<FormFields>({
-    defaultValues: {
-      name: "John",
-      email: "JohnDoe@domain.xx",
-      password: "123456",
-    },
-  });
+  } = useForm<FormFields>();
 
   /***
    * onSubmit function
@@ -44,18 +37,21 @@ function Register() {
    *
    */
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    // Simulate a server request, handling errors
     try {
-      console.log(data);
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // wait for server response
-      if (formTitle.current) {
-        // update current form status
-        formTitle.current.innerHTML = "Sign in <br/> Registration successful";
-      }
-      navigate("/");
+      const response = await axiosConfig.post("/api/v1/auth/register", data);
+      const { token } = response.data;
+      const { errorMessage } = response.data;
+      console.log(
+        `State of response:\n ErrMsg ${errorMessage}\nStatus:${response.status}`
+      );
+      if (token) sessionStorage.setItem("token", token);
+      if (
+        response.status === 200 &&
+        (errorMessage === null || errorMessage === undefined)
+      )
+        navigate("/login");
     } catch (error) {
-      // example error handling
-      console.log(error);
+      console.log(`error:${error}`);
     }
   };
 
@@ -65,8 +61,8 @@ function Register() {
         Sign in <br />
         <span style={{ visibility: "hidden" }}>Registration successful</span>
       </h2>
-      {errors.name ? (
-        <div className="incorrect-message">{errors.name.message}</div>
+      {errors.username ? (
+        <div className="incorrect-message">{errors.username.message}</div>
       ) : (
         <div
           className="incorrect-message invisible"
@@ -76,7 +72,7 @@ function Register() {
         </div>
       )}
       <input
-        {...register("name", {
+        {...register("username", {
           required: "Name is required",
           minLength: {
             value: 3,
@@ -107,6 +103,9 @@ function Register() {
       {errors.root && (
         <div className="incorrect-message">{errors.root.message}</div>
       )}
+      <button type="button" onClick={() => navigate("/login")}>
+        Return?
+      </button>
       <button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Loading..." : "Submit"}
       </button>
