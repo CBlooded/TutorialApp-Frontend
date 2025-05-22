@@ -48,7 +48,7 @@ function Login() {
       console.log(
         `State of response:\nErrMsg:${errorMessage}\nStatus:${response.status}`
       );
-      if (token) localStorage.setItem("token", token);
+      if (token) sessionStorage.setItem("token", token);
       if (response.status === 200 && errorMessage === null) navigate("/app");
     } catch (error) {
       console.log(`error:${error}`);

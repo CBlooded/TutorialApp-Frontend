@@ -4,7 +4,7 @@ import axiosConfig from "./axiosConfig";
 const setupInterceptors = () => {
   axiosConfig.interceptors.request.use(
     (config) => {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -18,27 +18,11 @@ const setupInterceptors = () => {
       return response;
     },
     async (error) => {
-      if (error.response.status === 401) console.log("Unauthorized");
-      //no refresh tokens yet
-      // const originalRequest = error.config;
-      // if (error.response.status === 401 && !originalRequest._retry) {
-      //   originalRequest._retry = true;
-      //   const refreshToken = localStorage.getItem("refreshToken");
-      //   if (refreshToken) {
-      //     try {
-      //       const response = await axiosConfig.post(`/refreshToken`, {
-      //         //tbc
-      //         refreshToken,
-      //       });
-      //       const newAccessToken = response.data.accessToken;
-      //       localStorage.setItem("accessToken", newAccessToken);
-      //       originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-      //       return axios(originalRequest);
-      //     } catch (error) {
-      //       console.log(`Token failed: ${error}`);
-      //     }
-      //   }
-      // }
+      if (error.response.status === 401) {
+        console.log("Unauthorized");
+        sessionStorage.removeItem("token");
+      }
+
       return Promise.reject(error);
     }
   );
