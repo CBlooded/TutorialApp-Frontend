@@ -45,7 +45,11 @@ function Register() {
         `State of response:\n ErrMsg ${errorMessage}\nStatus:${response.status}`
       );
       if (token) sessionStorage.setItem("token", token);
-      if (response.status === 200 && errorMessage === null) navigate("/login");
+      if (
+        response.status === 200 &&
+        (errorMessage === null || errorMessage === undefined)
+      )
+        navigate("/login");
     } catch (error) {
       console.log(`error:${error}`);
     }

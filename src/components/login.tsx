@@ -49,7 +49,11 @@ function Login() {
         `State of response:\nErrMsg:${errorMessage}\nStatus:${response.status}`
       );
       if (token) sessionStorage.setItem("token", token);
-      if (response.status === 200 && errorMessage === null) navigate("/app");
+      if (
+        response.status === 200 &&
+        (errorMessage === null || errorMessage === undefined)
+      )
+        navigate("/app");
     } catch (error) {
       console.log(`error:${error}`);
     }
