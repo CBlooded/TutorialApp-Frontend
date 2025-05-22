@@ -53,7 +53,7 @@ function Login() {
         response.status === 200 &&
         (errorMessage === null || errorMessage === undefined)
       )
-        navigate("/");
+        navigate("/dashboard");
     } catch (error) {
       console.log(`error:${error}`);
     }
