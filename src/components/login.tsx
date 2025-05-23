@@ -1,6 +1,6 @@
 //import React, { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import "./login-register-style.css";
 import { useNavigate } from "react-router";
@@ -23,6 +23,7 @@ function Login() {
   // form title referece
   const formTitle = useRef<HTMLHeadingElement>(null);
   const navigate = useNavigate();
+  const [username, setUsername] = useState("");
 
   const {
     register,
@@ -37,6 +38,11 @@ function Login() {
    * @param {FormFields} data - form data
    *
    */
+
+  const saveUserName = (user: string) => {
+    sessionStorage.setItem("username", user);
+  };
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await axiosConfig.post(
@@ -48,12 +54,14 @@ function Login() {
       console.log(
         `State of response:\nErrMsg:${errorMessage}\nStatus:${response.status}`
       );
-      if (token) sessionStorage.setItem("token", token);
+      if (token) {
+        sessionStorage.setItem("token", token);
+      }
       if (
         response.status === 200 &&
         (errorMessage === null || errorMessage === undefined)
       )
-        navigate("/app");
+        navigate("/dashboard");
     } catch (error) {
       console.log(`error:${error}`);
     }
@@ -85,6 +93,7 @@ function Login() {
         })}
         type="text"
         placeholder="Enter username..."
+        onChange={(e) => setUsername(e.target.value)}
       />
       {errors.password && (
         <div className="incorrect-message">{errors.password.message}</div>
@@ -105,7 +114,13 @@ function Login() {
       {errors.root && (
         <div className="incorrect-message">{errors.root.message}</div>
       )}
-      <button type="button" onClick={() => navigate("/register")}>
+      <button
+        type="button"
+        onClick={() => {
+          navigate("/register");
+          saveUserName(username);
+        }}
+      >
         Register?
       </button>
       <button type="submit" disabled={isSubmitting}>
