@@ -1,5 +1,5 @@
-import NavBar from "../components/NavBar";
-import "./pages.css";
+  import './dashboard.css'
+ import NavBar from "../components/NavBar";
 
 function dashboard() {
   return (

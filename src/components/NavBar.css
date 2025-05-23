@@ -4,7 +4,7 @@
   height: 80px;
   background: #1d417c;
 
-  position: fixed;
+  position: fixed; /* Make the navbar stick to the top */
   top: 0;
   left: 0;
   right: 0;
@@ -20,11 +20,6 @@ a {
   font-weight: bold;
 }
 
-.breadCrumbs {
-  position: fixed;
-  top: 65px;
-  left: 30px;
-}
 
 .navLinks {
   display: flex;

@@ -1,4 +1,4 @@
-import NavBar from "../components/NavBar";
+import NavBar from "./NavBar";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
 type FormFields = {

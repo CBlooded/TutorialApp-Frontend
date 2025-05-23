@@ -3,7 +3,7 @@ import "./App.css";
 import Login from "./components/login";
 import Register from "./components/register";
 import Dashboard from "./pages/dashboard";
-import Chat from "./pages/chat";
+import Chat from "./pages/chatPage";
 
 import { BrowserRouter, Routes, Route } from "react-router";
 import { useEffect } from "react";
