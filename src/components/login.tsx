@@ -53,7 +53,7 @@ function Login() {
         response.status === 200 &&
         (errorMessage === null || errorMessage === undefined)
       )
-        navigate("/app");
+        navigate("/dashboard");
     } catch (error) {
       console.log(`error:${error}`);
     }
@@ -81,7 +81,7 @@ function Login() {
             message: "username must be at least 3 characters",
           },
           maxLength: 20,
-          pattern: /^[A-Za-z]+$/i,
+          //pattern: /^[A-Za-z]+$/i,
         })}
         type="text"
         placeholder="Enter username..."

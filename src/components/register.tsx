@@ -49,7 +49,7 @@ function Register() {
         response.status === 200 &&
         (errorMessage === null || errorMessage === undefined)
       )
-        navigate("/login");
+        navigate("/");
     } catch (error) {
       console.log(`error:${error}`);
     }
@@ -79,7 +79,7 @@ function Register() {
             message: "Name must be at least 3 characters",
           },
           maxLength: 20,
-          pattern: /^[A-Za-z]+$/i,
+          //pattern: /^[A-Za-z]+$/i,
         })}
         type="text"
         placeholder="Enter name..."

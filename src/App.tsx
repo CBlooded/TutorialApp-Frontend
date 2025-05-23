@@ -8,6 +8,8 @@ import Chat from "./pages/chatPage";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { useEffect } from "react";
 import setupInterceptors from "./api/SetupInterceptor";
+import ProtectedRoute from "./components/ProtectedRoute";
+import NotFoundRoute from "./components/NotFoundRoute";
 
 function App() {
   useEffect(() => {
@@ -15,18 +17,31 @@ function App() {
   }, []);
 
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/">
-            <Route index element={<Login />} />
-            <Route path="register" element={<Register />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="chat" element={<Chat />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="*" element={<NotFoundRoute />} />
+        <Route path="/">
+          <Route index element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route
+            path="dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="chat"
+            element={
+              <ProtectedRoute>
+                <Chat />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
