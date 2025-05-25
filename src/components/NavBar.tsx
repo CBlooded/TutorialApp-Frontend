@@ -1,7 +1,6 @@
 import "./NavBar.css";
 import logo from "../assets/logo.png";
 
-
 function NavBar() {
   /***
    * Main Navigation Bar

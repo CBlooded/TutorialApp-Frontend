@@ -37,6 +37,7 @@ function Login() {
    * @param {FormFields} data - form data
    *
    */
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await axiosConfig.post(
@@ -48,7 +49,10 @@ function Login() {
       console.log(
         `State of response:\nErrMsg:${errorMessage}\nStatus:${response.status}`
       );
-      if (token) sessionStorage.setItem("token", token);
+      if (token) {
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("username", data.username);
+      }
       if (
         response.status === 200 &&
         (errorMessage === null || errorMessage === undefined)
@@ -105,7 +109,12 @@ function Login() {
       {errors.root && (
         <div className="incorrect-message">{errors.root.message}</div>
       )}
-      <button type="button" onClick={() => navigate("/register")}>
+      <button
+        type="button"
+        onClick={() => {
+          navigate("/register");
+        }}
+      >
         Register?
       </button>
       <button type="submit" disabled={isSubmitting}>
