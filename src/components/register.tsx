@@ -79,7 +79,7 @@ function Register() {
             message: "Name must be at least 3 characters",
           },
           maxLength: 20,
-          pattern: /^[A-Za-z]+$/i,
+          //pattern: /^[A-Za-z]+$/i,
         })}
         type="text"
         placeholder="Enter name..."
