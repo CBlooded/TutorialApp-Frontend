@@ -15,10 +15,13 @@ function ChatRoomMessenger() {
         console.log(
           `Connected! username: ${sessionStorage.getItem("username")}`
         );
-        subscribe("/topic/messages/#k2342", (msg) => {
-          console.log("Received message in chat room:", msg);
-          setMessages((prev) => [...prev, msg]);
-        });
+        subscribe(
+          `/topic/messages/${sessionStorage.getItem("roomKey")}`,
+          (msg) => {
+            console.log("Received message in chat room:", msg);
+            setMessages((prev) => [...prev, msg]);
+          }
+        );
       },
       (error) => console.log("WebSocket Error:", error)
     );
@@ -29,7 +32,7 @@ function ChatRoomMessenger() {
 
   useEffect(() => {
     return () => {
-      unsubscribe("/topic/messages/#k2342");
+      unsubscribe(`/topic/messages/${sessionStorage.getItem("roomKey")}`);
       disconnect();
     };
   }, []);
@@ -54,7 +57,7 @@ function ChatRoomMessenger() {
         <button
           className="send-button"
           onClick={() => {
-            send("/app/sendMessage/#k2342", {
+            send(`/app/sendMessage/${sessionStorage.getItem("roomKey")}`, {
               usernameFrom: sessionStorage.getItem("username"),
               text: inputText,
             });
