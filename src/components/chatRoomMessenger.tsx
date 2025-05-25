@@ -11,45 +11,44 @@ function ChatRoomMessenger() {
   const { connect, subscribe, send, unsubscribe, disconnect } =
     useWebSocketService(
       webSocketUrl,
-      () => console.log("Connected!"),
+      () => {
+        console.log(
+          `Connected! username: ${sessionStorage.getItem("username")}`
+        );
+        subscribe("/topic/messages/#k2342", (msg) => {
+          console.log("Received message in chat room:", msg);
+          setMessages((prev) => [...prev, msg]);
+        });
+      },
       (error) => console.log("WebSocket Error:", error)
     );
 
   useEffect(() => {
     connect();
+  }, [connect]);
 
-    subscribe("/topic/messages/#k2342", (message) => {
-      const parsed = JSON.parse(message.body);
-      setMessages((prevMessages) => [...prevMessages, parsed]);
-    });
-
+  useEffect(() => {
     return () => {
       unsubscribe("/topic/messages/#k2342");
       disconnect();
     };
-  }, [connect, subscribe, disconnect, unsubscribe]);
+  }, []);
 
   return (
     <div className="chat-room-container">
       <div className="conversation-area">
-        <div className="message">
-          {/* sample code */}
-          <div className="message-sender"></div>
-          <div className="message-text">
-            {messages.map((msg, index) => (
-              <div key={index}>{msg.text}</div>
-            ))}
+        {messages.map((msg, index) => (
+          <div className="message" key={index}>
+            <div className="message-sender">{msg.usernameFrom}</div>
+            <div className="message-text">{msg.text}</div>
           </div>
-        </div>
-        <div className="message">
-          <div className="message-sender"></div>
-          <div className="message-text"></div>
-        </div>
+        ))}
       </div>
       <div className="user-input-area">
         <textarea
           placeholder="Type your message..."
           className="user-input"
+          value={inputText}
           onChange={(e) => setInputText(e.target.value)}
         />
         <button

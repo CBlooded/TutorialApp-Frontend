@@ -1,6 +1,6 @@
 //import React, { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import "./login-register-style.css";
 import { useNavigate } from "react-router";
@@ -23,7 +23,6 @@ function Login() {
   // form title referece
   const formTitle = useRef<HTMLHeadingElement>(null);
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
 
   const {
     register,
@@ -39,10 +38,6 @@ function Login() {
    *
    */
 
-  const saveUserName = (user: string) => {
-    sessionStorage.setItem("username", user);
-  };
-
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await axiosConfig.post(
@@ -56,6 +51,7 @@ function Login() {
       );
       if (token) {
         sessionStorage.setItem("token", token);
+        sessionStorage.setItem("username", data.username);
       }
       if (
         response.status === 200 &&
@@ -93,7 +89,6 @@ function Login() {
         })}
         type="text"
         placeholder="Enter username..."
-        onChange={(e) => setUsername(e.target.value)}
       />
       {errors.password && (
         <div className="incorrect-message">{errors.password.message}</div>
@@ -118,7 +113,6 @@ function Login() {
         type="button"
         onClick={() => {
           navigate("/register");
-          saveUserName(username);
         }}
       >
         Register?

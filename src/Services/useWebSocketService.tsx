@@ -2,7 +2,9 @@ import { useEffect, useReducer, useRef, useCallback } from "react";
 import { Client, type IMessage, type StompSubscription } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
-type SubscriptionCallback = (message: IMessage) => void;
+type ChatMessage = { usernameFrom: string; text: string };
+
+type SubscriptionCallback = (message: ChatMessage) => void;
 
 type State = {
   client: Client | null;
@@ -87,17 +89,32 @@ export const useWebSocketService = (
     dispatch({ type: "SET_CLIENT", payload: client });
   }, [state.client, webSocketUrl, onConnectCallback, onErrorCallback, token]);
 
+  const subscriptionsRef = useRef(state.subscriptions);
+
+  useEffect(() => {
+    subscriptionsRef.current = state.subscriptions;
+  }, [state.subscriptions]);
+
+  // then in subscribe callback:
   const subscribe = useCallback(
     (destination: string, callback: SubscriptionCallback) => {
       const client = clientRef.current;
       if (!client || !isConnected.current) return;
 
-      if (state.subscriptions.has(destination)) return;
+      if (subscriptionsRef.current.has(destination)) return;
 
       const subscription = client.subscribe(
         destination,
         (message: IMessage) => {
-          if (message.body) callback(JSON.parse(message.body));
+          console.log("Received raw message:", message.body);
+          if (message.body) {
+            try {
+              const parsed = JSON.parse(message.body) as ChatMessage;
+              callback(parsed);
+            } catch (e) {
+              console.error("Failed to parse message body:", e);
+            }
+          }
         }
       );
 
@@ -106,7 +123,7 @@ export const useWebSocketService = (
         payload: { destination, subscription },
       });
     },
-    [state.subscriptions]
+    [] // no state.subscriptions here!
   );
 
   const send = useCallback(
