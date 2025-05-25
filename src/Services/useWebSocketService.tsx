@@ -95,7 +95,6 @@ export const useWebSocketService = (
     subscriptionsRef.current = state.subscriptions;
   }, [state.subscriptions]);
 
-  // then in subscribe callback:
   const subscribe = useCallback(
     (destination: string, callback: SubscriptionCallback) => {
       const client = clientRef.current;
@@ -123,7 +122,7 @@ export const useWebSocketService = (
         payload: { destination, subscription },
       });
     },
-    [] // no state.subscriptions here!
+    []
   );
 
   const send = useCallback(
