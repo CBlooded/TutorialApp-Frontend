@@ -15,7 +15,7 @@
 }
 
 .chat-room-container .conversation-area {
-display: flex;
+  display: flex;
   flex-direction: column;
   gap: 3vh;
 
@@ -30,16 +30,18 @@ display: flex;
   border-top-right-radius: 1rem;
 }
 
-
 .chat-room-container .conversation-area .message {
-
   display: flex;
   flex-direction: column;
   /* gap: 10px; */
 }
 
+.message {
+  border: 1px solid white;
+  padding: 1%;
+}
+
 .chat-room-container .user-input-area {
-  
   /* box-sizing: border-box;
   padding: 5px;  */
   height: 20%;
@@ -53,7 +55,7 @@ display: flex;
 }
 
 .chat-room-container .user-input-area .user-input {
-    background-color: rgb(21, 21, 21);
+  background-color: rgb(21, 21, 21);
   color: white;
   flex: 4;
   padding: 1.4vh;
@@ -66,11 +68,17 @@ display: flex;
 }
 
 .chat-room-container .user-input-area .send-button {
-    background-color: rgb(21, 21, 21);
+  background-color: rgb(21, 21, 21);
   color: white;
   border-radius: 1rem;
   border: 0.1vh solid #97b7f8;
   height: 13vh;
   flex: 1;
   font-size: 3vh;
+}
+
+.message-sender {
+  font-style: italic;
+  font-weight: bold;
+  color: #8b8989;
 }
