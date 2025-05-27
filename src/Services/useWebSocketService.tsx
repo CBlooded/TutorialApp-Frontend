@@ -100,7 +100,8 @@ export const useWebSocketService = (
       const client = clientRef.current;
       if (!client || !isConnected.current) return;
 
-      if (subscriptionsRef.current.has(destination)) return;
+      const currentSubs = subscriptionsRef.current;
+      if (currentSubs.has(destination)) return;
 
       const subscription = client.subscribe(
         destination,

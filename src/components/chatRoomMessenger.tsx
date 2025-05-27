@@ -1,8 +1,10 @@
 import "./chatRoomMessenger.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useWebSocketService } from "../Services/useWebSocketService";
+import axiosConfig from "../api/axiosConfig";
 
 function ChatRoomMessenger() {
+  const conversationAreaRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<
     { usernameFrom: string; text: string }[]
   >([]);
@@ -18,7 +20,6 @@ function ChatRoomMessenger() {
         subscribe(
           `/topic/messages/${sessionStorage.getItem("roomKey")}`,
           (msg) => {
-            console.log("Received message in chat room:", msg);
             setMessages((prev) => [...prev, msg]);
           }
         );
@@ -26,9 +27,36 @@ function ChatRoomMessenger() {
       (error) => console.log("WebSocket Error:", error)
     );
 
+  const scrollToBottom = () => {
+    if (conversationAreaRef.current) {
+      conversationAreaRef.current.scrollTop =
+        conversationAreaRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   useEffect(() => {
     connect();
   }, [connect]);
+
+  useEffect(() => {
+    const rawRoomKey = sessionStorage.getItem("roomKey") ?? "";
+    if (!rawRoomKey) return;
+    const roomKey = encodeURIComponent(rawRoomKey);
+
+    axiosConfig
+      .get(`/getMessage/${roomKey}?page=0&size=50`)
+      .then((response) => {
+        const newMessages = response.data;
+        setMessages((prev) => [...newMessages, ...prev]);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch messages:", error);
+      });
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -39,13 +67,22 @@ function ChatRoomMessenger() {
 
   return (
     <div className="chat-room-container">
-      <div className="conversation-area">
-        {messages.map((msg, index) => (
-          <div className="message" key={index}>
-            <div className="message-sender">{msg.usernameFrom}</div>
-            <div className="message-text">{msg.text}</div>
-          </div>
-        ))}
+      <div className="conversation-area" ref={conversationAreaRef}>
+        {messages.map((msg, index) => {
+          const isCurrentUser =
+            msg.usernameFrom === sessionStorage.getItem("username");
+          return (
+            <div
+              className={isCurrentUser ? "guest-user" : "host-user"}
+              key={index}
+            >
+              <div className="message">
+                <div className="message-sender">{msg.usernameFrom}</div>
+                <div>{msg.text}</div>
+              </div>
+            </div>
+          );
+        })}
       </div>
       <div className="user-input-area">
         <textarea
