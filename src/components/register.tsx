@@ -62,38 +62,40 @@ function Register() {
         Sign in <br />
         <span style={{ visibility: "hidden" }}>Registration successful</span>
       </h2>
-      {errors.username ? (
-        <div className="incorrect-message">{errors.username.message}</div>
+      {errors.email ? (
+        <div className="incorrect-message">{errors.email.message}</div>
       ) : (
-        <div
-          className="incorrect-message invisible"
-          style={{ visibility: "hidden" }}
-        >
-          ABC
-        </div>
+        ""
       )}
-       <input
+      <input
         {...register("email", {
-          required: "email is required",
+          required: "Email is required",
           validate: (value) => {
-            const errors = [];
-            if (!value.includes("@"))
-              errors.push("Email address must contain @");
-            if (!value.includes("."))
-              errors.push("Email address must contain .");
+            if (!value.includes("@")) 
+              return "Email address must contain @";
+            if (!value.includes(".")) 
+              return "Email address must contain .";
             if (value.indexOf("@") === 0)
-              errors.push("Email address cannot start with @");
-            if (value.split("@")[1].includes("."))
-              errors.push("Wrong email format");
-            if (value.indexOf("@") > value.indexOf("."))
-              errors.push("Email format invalid - @ must be before .");
-            return errors.length > 0 ? errors.join(", ") : true;
+              return "Email address cannot start with @";
+            if (!value.split("@")[1]?.includes("."))
+              return "Invalid domain";
+            if (value.split("@")[1].charAt(0) == '.')
+              return "Invalid domain";
+            if (value.lastIndexOf(".") === value.length - 1)
+              return "Invalid domain after .";
+
+            return true;
           },
           maxLength: 50,
         })}
         type="text"
         placeholder="Enter email..."
       />
+      {errors.username ? (
+        <div className="incorrect-message">{errors.username.message}</div>
+      ) : (
+        ""
+      )}
       <input
         {...register("username", {
           required: "Name is required",
