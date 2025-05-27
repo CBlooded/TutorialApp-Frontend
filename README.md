@@ -1,54 +1,67 @@
-# React + TypeScript + Vite
+# TutorialApp Chat Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+TutorialApp is a real-time chat application built with React, TypeScript, and WebSockets. It allows users to register, login, join chat rooms using room keys, and exchange messages in real time.
 
-Currently, two official plugins are available:
+## Features
+- User authentication (register/login)
+- Real-time messaging using WebSockets
+- Chat room functionality with room keys
+- Message history
+- Responsive design
+- Protected routes for authenticated users
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
+- React 19
+- TypeScript
+- Vite
+- WebSockets (STOMP over SockJS)
+- Axios for HTTP requests
+- React Hook Form for form handling
+- React Router for navigation
 
-## Expanding the ESLint configuration
+## Prerequisites
+- Node.js (v16+)
+- npm or yarn
+- Backend server running at http://localhost:8080
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Installation
+1. Clone the repository
+`git clone https://github.com/CBlooded/TutorialApp-Frontend.git`
+`cd TutorialApp-Frontend`
+2. Install dependencies
+`npm install`
+3. Start the development server:
+`npm run dev`
+4. Set up the backend
+   - Clone the backend repository:
+     `git clone https://github.com/CBlooded/TutorialApp-Backend.git`
+     `cd TutorialApp-Backend`
+   - Follow the instructions in the backend README.md
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Usage
+1. Register a new account or login with existing credentials
+2. Navigate to the Chat page
+3. Enter a room key (must start with #, e.g., #key12)
+4. Start chatting in real-time with other users in the same room
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Project Structure
+- `/src/components`: UI components (Login, Register, NavBar, ChatRoomMessenger)
+- `/src/pages`: Page components (Dashboard, Chat)
+- `/src/Services`: Service modules (WebSocket service)
+- `/src/api`: API configuration and interceptors
+- `/src/assets`: Static assets
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## API Endpoints
+- Authentication: `/api/v1/auth/authenticate` (POST)
+- Registration: `/api/v1/auth/register` (POST)
+- Chat WebSocket: `http://localhost:8080/chat`
+- Chat topics: `/topic/messages/{roomKey}`
+- Send message: `/app/sendMessage/{roomKey}`
+
+## WebSocket Configuration
+The application uses STOMP over SockJS for WebSocket communication. Messages are sent to specific rooms and received from subscribed topics.
+
+## Styling
+Styling is done using CSS files for each component.
