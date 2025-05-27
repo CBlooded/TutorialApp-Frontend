@@ -1,7 +1,6 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router";
-
-
+import axiosConfig from "../api/axiosConfig";
 
 /**
  * ForgotPassword component
@@ -10,9 +9,14 @@ import { useNavigate } from "react-router";
  * @returns {JSX.Element} ForgotPassword component
  */
 
+/**
+ * ForgotPassword component
+ * This component is used to render the forgot password form.
+ * @returns {JSX.Element} ForgotPassword form
+ * @param {string} username - user for which password is to be reset
+ */
 function ForgotPassword() {
-
-  const { 
+  const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -21,26 +25,26 @@ function ForgotPassword() {
   const navigate = useNavigate();
 
   type FormFields = {
-    email: string;
-    password: string;
+    username: string;
   };
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    try{
-        console.log("success\n",data);
-    } catch (ee) {
-        console.log("data submit failed\n", ee);
+    console.log(data);
+    try {
+      await axiosConfig.post(
+        `/api/v1/user/password/reset/host?u=${data.username}`
+      );
+        // navigate("/");
+    } catch (error) {
+      console.log(`error:${error}`);
     }
   };
 
   return (
     <>
       <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-      <h2>Reset Password</h2>
-      {errors.email && (
-        <div className="incorrect-message">{errors.email.message}</div>
-      )}
-        <input
+        <h2>Send password reset email</h2>
+        {/* <input
           {...register("email", {
             required: "Email is required",
             validate: (value) => {
@@ -59,8 +63,8 @@ function ForgotPassword() {
           })}
           type="text"
           placeholder="Enter email..."
-        />
-        {errors.password && (
+        /> */}
+        {/* {errors.password && (
           <div className="incorrect-message">{errors.password.message}</div>
         )}
         <input
@@ -74,6 +78,14 @@ function ForgotPassword() {
           })}
           type="password"
           placeholder="Enter password..."
+        /> */}
+        {errors.username && (
+          <div className="incorrect-message">{errors.username.message}</div>
+        )}
+        <input
+          {...register("username", { required: "Username is required" })}
+          type="text"
+          placeholder="Enter username..."
         />
         <button onClick={() => navigate("/")}>Return</button>
         <button type="submit" disabled={isSubmitting}>
