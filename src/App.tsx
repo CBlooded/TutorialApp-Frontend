@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import setupInterceptors from "./api/SetupInterceptor";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundRoute from "./components/NotFoundRoute";
+import ForgotPassword from "./components/forgotPassword";
 
 function App() {
   useEffect(() => {
@@ -22,6 +23,7 @@ function App() {
         <Route path="*" element={<NotFoundRoute />} />
         <Route path="/">
           <Route index element={<Login />} />
+          <Route path="forgotPassword" element={<ForgotPassword />} />
           <Route path="register" element={<Register />} />
           <Route
             path="dashboard"
