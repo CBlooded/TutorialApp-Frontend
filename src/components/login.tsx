@@ -1,10 +1,11 @@
 //import React, { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useRef } from "react";
+import { useState, useRef } from "react";
 
 import "./login-register-style.css";
 import { useNavigate } from "react-router";
 import axiosConfig from "../api/axiosConfig";
+import axios from "axios";
 
 /**
  * login component
@@ -21,6 +22,7 @@ type FormFields = {
 
 function Login() {
   // form title referece
+  const [networkError, setNetworkError] = useState<string>("");
   const formTitle = useRef<HTMLHeadingElement>(null);
   const navigate = useNavigate();
 
@@ -39,6 +41,7 @@ function Login() {
    */
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    setNetworkError("");
     try {
       const response = await axiosConfig.post(
         "/api/v1/auth/authenticate",
@@ -53,13 +56,23 @@ function Login() {
         sessionStorage.setItem("token", token);
         sessionStorage.setItem("username", data.username);
       }
-      if (
-        response.status === 200 &&
-        (errorMessage === null || errorMessage === undefined)
-      )
-        navigate("/dashboard");
+      navigate("/dashboard");
     } catch (error) {
-      console.log(`error:${error}`);
+      if (axios.isAxiosError(error) && error.response) {
+        switch (error.response.status) {
+          case 404:
+            setNetworkError("404, user not found!");
+            break;
+          case 409:
+            setNetworkError("409, user already exist");
+            break;
+          case 403:
+            setNetworkError("403, bad credentials!");
+            break;
+          default:
+            setNetworkError("unknown error!");
+        }
+      }
     }
   };
 
@@ -109,6 +122,7 @@ function Login() {
       {errors.root && (
         <div className="incorrect-message">{errors.root.message}</div>
       )}
+      {networkError}
       <button
         type="button"
         onClick={() => {

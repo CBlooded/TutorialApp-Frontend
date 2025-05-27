@@ -1,10 +1,11 @@
 //import React, { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import axiosConfig from "../api/axiosConfig";
 
 import "./login-register-style.css";
+import axios from "axios";
 
 /**
  * register component
@@ -17,10 +18,12 @@ import "./login-register-style.css";
 type FormFields = {
   username: string;
   password: string;
+  email: string;
 };
 
 function Register() {
   // form title referece
+  const [networkError, setNetworkError] = useState<string>("");
   const formTitle = useRef<HTMLHeadingElement>(null);
   const navigate = useNavigate();
   const {
@@ -36,22 +39,32 @@ function Register() {
    * @param {FormFields} data - form data
    *
    */
+
+  //to be separated into different
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    setNetworkError("");
     try {
       const response = await axiosConfig.post("/api/v1/auth/register", data);
       const { token } = response.data;
-      const { errorMessage } = response.data;
-      console.log(
-        `State of response:\n ErrMsg ${errorMessage}\nStatus:${response.status}`
-      );
       if (token) sessionStorage.setItem("token", token);
-      if (
-        response.status === 200 &&
-        (errorMessage === null || errorMessage === undefined)
-      )
-        navigate("/");
-    } catch (error) {
-      console.log(`error:${error}`);
+      navigate("/");
+      console.log("registered!");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        switch (error.response.status) {
+          case 404:
+            setNetworkError("404, user not found!");
+            break;
+          case 409:
+            setNetworkError("409, user already exist");
+            break;
+          case 403:
+            setNetworkError("403, bad credentials!");
+            break;
+          default:
+            setNetworkError("unknown error!");
+        }
+      }
     }
   };
 
@@ -87,6 +100,14 @@ function Register() {
       {errors.password && (
         <div className="incorrect-message">{errors.password.message}</div>
       )}
+
+      <input
+        {...register("email", {
+          required: "Name is required",
+        })}
+        type="text"
+        placeholder="Enter email..."
+      />
       <input
         {...register("password", {
           required: "Password is required",
@@ -103,6 +124,7 @@ function Register() {
       {errors.root && (
         <div className="incorrect-message">{errors.root.message}</div>
       )}
+      {networkError}
       <button type="button" onClick={() => navigate("/")}>
         Return?
       </button>
