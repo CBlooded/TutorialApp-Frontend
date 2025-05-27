@@ -15,6 +15,7 @@ import "./login-register-style.css";
  */
 
 type FormFields = {
+  email: string;
   username: string;
   password: string;
 };
@@ -71,6 +72,28 @@ function Register() {
           ABC
         </div>
       )}
+       <input
+        {...register("email", {
+          required: "email is required",
+          validate: (value) => {
+            const errors = [];
+            if (!value.includes("@"))
+              errors.push("Email address must contain @");
+            if (!value.includes("."))
+              errors.push("Email address must contain .");
+            if (value.indexOf("@") === 0)
+              errors.push("Email address cannot start with @");
+            if (value.split("@")[1].includes("."))
+              errors.push("Wrong email format");
+            if (value.indexOf("@") > value.indexOf("."))
+              errors.push("Email format invalid - @ must be before .");
+            return errors.length > 0 ? errors.join(", ") : true;
+          },
+          maxLength: 50,
+        })}
+        type="text"
+        placeholder="Enter email..."
+      />
       <input
         {...register("username", {
           required: "Name is required",
