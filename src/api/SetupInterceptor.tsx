@@ -18,7 +18,7 @@ const setupInterceptors = () => {
       return response;
     },
     async (error) => {
-      if (error.response.status === 401) {
+      if (error.response?.status === 401) {
         console.log("Unauthorized");
         sessionStorage.removeItem("token");
       }
