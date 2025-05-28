@@ -18,34 +18,40 @@ function App() {
     setupInterceptors();
   }, []);
 
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="*" element={<NotFoundRoute />} />
-        <Route path="/">
-          <Route index element={<Login />} />
-          <Route path="forgotPassword" element={<ForgotPassword />} />
-          <Route path="register" element={<Register />} />
-          <Route path="/password/reset/:hostUUID" element={<ResetPasswordForm/>}></Route>
-          <Route
-            path="dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="chat"
-            element={
-              <ProtectedRoute>
-                <Chat />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="*" element={<NotFoundRoute />} />
+          <Route path="/">
+            <Route index element={<Login />} />
+            <Route path="forgotPassword" element={<ForgotPassword />} />
+            <Route path="register" element={<Register />} />
+            <Route
+              path="/password/reset/:hostUUID"
+              element={<ResetPasswordForm />}
+            ></Route>
+            <Route
+              path="dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="chat"
+              element={
+                <ProtectedRoute>
+                  <Chat />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

@@ -5,6 +5,7 @@ const setupInterceptors = () => {
   axiosConfig.interceptors.request.use(
     (config) => {
       const token = sessionStorage.getItem("token");
+      console.log("setupInterceptors: ", token);
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
