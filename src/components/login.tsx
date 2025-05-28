@@ -117,6 +117,14 @@ function Login() {
       >
         Register?
       </button>
+      <button
+        type="button"
+        onClick={() => {
+          navigate("/forgotPassword");
+        }}
+      >
+        Forgot password?
+      </button>
       <button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Loading..." : "Submit"}
       </button>

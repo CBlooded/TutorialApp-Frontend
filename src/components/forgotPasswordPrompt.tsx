@@ -1,6 +1,7 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router";
 import axiosConfig from "../api/axiosConfig";
+import { useRef } from "react";
 
 /**
  * ForgotPassword component
@@ -28,15 +29,18 @@ function ForgotPassword() {
     username: string;
   };
 
+  const feedback = useRef<HTMLDivElement>(null);
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     console.log(data);
     try {
       await axiosConfig.post(
         `/api/v1/user/password/reset/host?u=${data.username}`
       );
+      feedback.current!.textContent = "Email sent successfully\nCheck your inbox";
         // navigate("/");
     } catch (error) {
       console.log(`error:${error}`);
+      feedback.current!.textContent = "Error occured, check your username";
     }
   };
 
@@ -44,41 +48,7 @@ function ForgotPassword() {
     <>
       <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
         <h2>Send password reset email</h2>
-        {/* <input
-          {...register("email", {
-            required: "Email is required",
-            validate: (value) => {
-              if (!value.includes("@")) return "Email address must contain @";
-              if (!value.includes(".")) return "Email address must contain .";
-              if (value.indexOf("@") === 0)
-                return "Email address cannot start with @";
-              if (!value.split("@")[1]?.includes(".")) return "Invalid domain";
-              if (value.split("@")[1].charAt(0) == ".") return "Invalid domain";
-              if (value.lastIndexOf(".") === value.length - 1)
-                return "Invalid domain after .";
-
-              return true;
-            },
-            maxLength: 50,
-          })}
-          type="text"
-          placeholder="Enter email..."
-        /> */}
-        {/* {errors.password && (
-          <div className="incorrect-message">{errors.password.message}</div>
-        )}
-        <input
-          {...register("password", {
-            required: "Password is required",
-            minLength: {
-              value: 6,
-              message: "Password must be at least 6 characters",
-            },
-            maxLength: 30,
-          })}
-          type="password"
-          placeholder="Enter password..."
-        /> */}
+        <div ref={feedback}> </div>
         {errors.username && (
           <div className="incorrect-message">{errors.username.message}</div>
         )}
